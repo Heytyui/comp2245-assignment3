@@ -53,4 +53,16 @@ window.addEventListener('DOMContentLoaded', function () {
         status.textContent= `Player ${currentPlayer} is the Winner!`;
         status.classList.add('you-won');
     }
+
+    restartGameButton.addEventListener('click', function () {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].textContent = '';
+            cells[i].classList.remove('X', 'O');
+            game[i] = null;
+        }
+        status.textContent = 'To play X or O , click on a square  using your mouse.';
+        status.classList.remove('you-won');
+        currentPlayer = players[0];
+
+    });
 });
