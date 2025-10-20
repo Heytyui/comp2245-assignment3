@@ -11,10 +11,11 @@ window.addEventListener('DOMContentLoaded', function () {
     const players = ['X', 'O'];
     let currentPlayer = players[0];
     const game = Array(9).fill(null);
+    let gameOver = false;
 
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener('click', function () {
-            if (!game[i]) {
+            if (!game[i] && !gameOver) {
                 cells[i].textContent = currentPlayer;
                 cells[i].classList.add(currentPlayer === 'X' ? 'O': 'X');
 
@@ -52,17 +53,22 @@ window.addEventListener('DOMContentLoaded', function () {
     if (checkWin(currentPlayer)) {
         status.textContent= `Player ${currentPlayer} is the Winner!`;
         status.classList.add('you-won');
+        gameOver = true;
+    
+    }else{
+        currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     }
 
     restartGameButton.addEventListener('click', function () {
         for (let i = 0; i < cells.length; i++) {
             cells[i].textContent = '';
-            cells[i].classList.remove('X', 'O');
+            cells[i].classList.remove('X', 'O', 'hover');
             game[i] = null;
         }
         status.textContent = 'To play X or O , click on a square  using your mouse.';
         status.classList.remove('you-won');
         currentPlayer = players[0];
+        gameOver = false;
 
     });
 });
