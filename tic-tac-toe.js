@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const board = document.getElementById('board');
     const cells = board.getElementsByTagName('div');
     const status = document.getElementById('status');
-
+    const restartGameButton = document.getElementsByClassName('btn')[0];
 
     for (let i = 0; i < cells.length; i++) {
         cells[i].classList.add('square');
@@ -13,13 +13,31 @@ window.addEventListener('DOMContentLoaded', function () {
     const game = Array(9).fill(null);
     let gameOver = false;
 
+    
+
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener('click', function () {
             if (!game[i] && !gameOver) {
                 cells[i].textContent = currentPlayer;
-                cells[i].classList.add(currentPlayer === 'X' ? 'O': 'X');
+                cells[i].classList.add(currentPlayer);
+                game[i] = currentPlayer;
 
-                
+                if (checkWin(currentPlayer)) {
+                    status.textContent= `Congratulations! ${currentPlayer} is the Winner!`;
+                    status.classList.add('you-won');
+                    gameOver = true;
+                    return;
+                }
+
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                status.textContent = `It's ${currentPlayer}'s turn.`;
+
+                if (checkDraw()) {
+                    status.textContent = "It's a draw!";
+                    gameOver = true;
+                    return;
+
+                }
             }
         });
 
@@ -50,14 +68,11 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (checkWin(currentPlayer)) {
-        status.textContent= `Player ${currentPlayer} is the Winner!`;
-        status.classList.add('you-won');
-        gameOver = true;
-    
-    }else{
-        currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+    function checkDraw() {
+        return game.every(cell => cell !== null);
     }
+
+
 
     restartGameButton.addEventListener('click', function () {
         for (let i = 0; i < cells.length; i++) {
